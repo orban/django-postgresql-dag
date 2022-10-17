@@ -289,7 +289,7 @@ class AncestorQuery(BaseQuery):
         return self.node_model.objects.raw(
             QUERY.format(
                 relationship_table=self.edge_model_table,
-                pk_name=self.instance.get_pk_name(),
+                pk_name=self.instance._meta.pk.attname,
                 where_clauses_part_1=self.where_clauses_part_1,
                 where_clauses_part_2=self.where_clauses_part_2,
             ),
@@ -546,9 +546,9 @@ class UpwardPathQuery(BaseQuery):
             -- LIMITING_UPWARD_NODES_CLAUSE_1  -- CORRECT?
             {where_clauses_part_2}
         )
-        SELECT 
+        SELECT
             UNNEST(ARRAY[{pk_name}]) AS {pk_name}
-        FROM 
+        FROM
             (
             SELECT path || ARRAY[%(ending_node)s]::{pk_type}[], depth FROM traverse
                 WHERE parent_id = %(ending_node)s
@@ -647,10 +647,10 @@ class DownwardPathQuery(BaseQuery):
             -- ALLOWED_DOWNWARD_PATH_NODES_CLAUSE
             -- LIMITING_DOWNWARD_NODES_CLAUSE_1  -- CORRECT?
             {where_clauses_part_2}
-        )      
-        SELECT 
+        )
+        SELECT
             UNNEST(ARRAY[{pk_name}]) AS {pk_name}
-        FROM 
+        FROM
             (
             SELECT path || ARRAY[%(ending_node)s]::{pk_type}[], depth FROM traverse
                 WHERE child_id = %(ending_node)s
