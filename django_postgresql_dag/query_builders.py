@@ -401,7 +401,7 @@ class DescendantQuery(BaseQuery):
         return self.node_model.objects.raw(
             QUERY.format(
                 relationship_table=self.edge_model_table,
-                pk_name=self.instance.get_pk_name(),
+                pk_name=self.instance._meta.pk.attname,
                 where_clauses_part_1=self.where_clauses_part_1,
                 where_clauses_part_2=self.where_clauses_part_2,
             ),
