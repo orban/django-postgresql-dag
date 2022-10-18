@@ -459,7 +459,7 @@ class ConnectedGraphQuery(BaseQuery):
         return self.node_model.objects.raw(
             QUERY.format(
                 relationship_table=self.edge_model_table,
-                pk_name=self.instance.get_pk_name(),
+                pk_name=self.instance._meta.pk.attname(),
                 pk_type=self.starting_node.get_pk_type(),
             ),
             self.query_parameters,
@@ -560,7 +560,7 @@ class UpwardPathQuery(BaseQuery):
         return self.node_model.objects.raw(
             QUERY.format(
                 relationship_table=self.edge_model_table,
-                pk_name=self.starting_node.get_pk_name(),
+                pk_name=self.starting_node._meta.pk.attname(),
                 pk_type=self.starting_node.get_pk_type(),
                 where_clauses_part_2=self.where_clauses_part_2,
             ),
@@ -662,7 +662,7 @@ class DownwardPathQuery(BaseQuery):
         return self.node_model.objects.raw(
             QUERY.format(
                 relationship_table=self.edge_model_table,
-                pk_name=self.starting_node.get_pk_name(),
+                pk_name=self.starting_node._meta.pk.attname,
                 pk_type=self.starting_node.get_pk_type(),
                 where_clauses_part_2=self.where_clauses_part_2,
             ),
